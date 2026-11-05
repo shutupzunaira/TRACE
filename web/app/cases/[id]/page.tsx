@@ -189,6 +189,9 @@ function CaseView({ c }: { c: CaseDetail }) {
   // "Replay the ghost": the button bumps this, LineageExplorer plays its slider with captions
   const [replay, setReplay] = useState(0);
   const canReplay = c.our_status !== "NOT_APPLICABLE" && c.lineage.nodes.length > 0 && c.timeline.length > 0;
+  // "Simulate the fix": INCOMPLETE cases with a remediation plan
+  const [fix, setFix] = useState(0);
+  const canFix = canReplay && c.our_status === "INCOMPLETE" && c.steps.some((s) => s.phase === "REMEDIATION");
 
   return (
     <div className="mt-4 space-y-6">
@@ -199,6 +202,7 @@ function CaseView({ c }: { c: CaseDetail }) {
             Requested {formatUtc(c.requested_at)} · Audited at {formatUtc(c.audit_at)}
           </p>
         </div>
+        <div className="flex flex-wrap gap-2">
         {canReplay && (
           <button
             type="button"
@@ -211,6 +215,17 @@ function CaseView({ c }: { c: CaseDetail }) {
             Replay the ghost
           </button>
         )}
+        {canFix && (
+          <button
+            type="button"
+            onClick={() => setFix((n) => n + 1)}
+            className="inline-flex items-center gap-2 rounded-full border border-[#0ca30c]/50 bg-[#0ca30c]/10 px-4 py-2 text-sm font-medium text-ink hover:bg-[#0ca30c]/20"
+          >
+            <span aria-hidden>✓</span>
+            Simulate the fix
+          </button>
+        )}
+        </div>
       </header>
 
       <VerdictBanner c={c} />
@@ -326,6 +341,8 @@ function CaseView({ c }: { c: CaseDetail }) {
             timeline={c.timeline}
             auditAt={c.timeline.find((e) => e.event === "AUDIT")?.time ?? c.audit_at}
             replaySignal={replay}
+            fixSignal={fix}
+            steps={c.steps}
             outcome={{
               reported: c.reported_status,
               ours: c.our_status,

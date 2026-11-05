@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import LineageMap, { type NodeTime } from "@/components/LineageMap";
+import LineageMap, { type FixState, type NodeTime } from "@/components/LineageMap";
 import {
   eventBasis,
   formatUtc,
@@ -10,6 +10,7 @@ import {
   STATUS_META,
   type Basis,
   type Lineage,
+  type Step,
   type TimelineEvent,
 } from "@/lib/types";
 
@@ -128,6 +129,59 @@ function pulseFor(lineage: Lineage, events: TimelineEvent[]): Record<string, "cl
   return out;
 }
 
+// ---------------------------------------------------------------------------
+// "Simulate the fix": remediation steps applied to the map, one per second
+// ---------------------------------------------------------------------------
+
+const FIX_MS = 1000;
+
+const FIX_OF: Record<string, FixState> = {
+  DISABLE_DATA_FLOW: "disabled",
+  BLOCK_RESTORE: "blocked",
+  DELETE_RECORD: "deleted",
+  REDACT_RECORD: "redacted",
+  ANONYMIZE_RECORD: "anonymized",
+};
+
+function stepText(s: Step): string {
+  const r = s.resource_id;
+  const sys = s.system_id;
+  switch (s.operation) {
+    case "DISABLE_DATA_FLOW":
+      return `Disable the data flow ${r} in ${sys}, so it can no longer copy the data back`;
+    case "BLOCK_RESTORE":
+      return `Block ${r} in ${sys} from restoring the person's data`;
+    case "DELETE_RECORD":
+      return `Delete ${r} from ${sys}`;
+    case "REDACT_RECORD":
+      return `Redact the personal identifiers in ${r} (${sys}) and keep the record`;
+    case "ANONYMIZE_RECORD":
+      return `Anonymize ${r} (${sys}) so it can no longer be linked to the person`;
+    default:
+      return `${s.operation} ${r} (${sys})`;
+  }
+}
+
+function checkText(s: Step): string {
+  const what = `${s.resource_id} (${s.system_id})`;
+  switch (s.operation) {
+    case "VERIFY_RECORD_ABSENT":
+      return `${what} no longer exists`;
+    case "VERIFY_RECORD_PRESENT":
+      return `${what} is still kept, as policy requires`;
+    case "VERIFY_RECORD_REDACTED":
+      return `${what} has its identifiers removed`;
+    case "VERIFY_RECORD_ANONYMIZED":
+      return `${what} can no longer be linked to the person`;
+    case "VERIFY_DATA_FLOW_DISABLED":
+      return `${what} is inactive`;
+    case "VERIFY_RESTORE_BLOCKED":
+      return `${what} cannot restore the data`;
+    default:
+      return `${s.operation} ${what}`;
+  }
+}
+
 export type ReplayOutcome = { reported: string; ours: string; exposed: number };
 
 const BASIS_STYLE: Record<Basis, string> = {
@@ -195,6 +249,8 @@ export default function LineageExplorer({
   auditAt,
   replaySignal = 0,
   outcome,
+  fixSignal = 0,
+  steps = [],
 }: {
   lineage: Lineage;
   timeline: TimelineEvent[];
@@ -203,6 +259,10 @@ export default function LineageExplorer({
   replaySignal?: number;
   /** what the final replay card says */
   outcome?: ReplayOutcome;
+  /** bump to start "Simulate the fix" (from the button at the top of the case page) */
+  fixSignal?: number;
+  /** the case's steps_json; only REMEDIATION and VERIFICATION steps are used */
+  steps?: Step[];
 }) {
   // Slider stops: every distinct moment, earliest -> audit_at
   const events = useMemo(
@@ -238,7 +298,50 @@ export default function LineageExplorer({
     return () => clearTimeout(t);
   }, [playing, index, last, replayOn, lines]);
 
+  // "Simulate the fix": the map stays at audit time while remediation steps apply one per second
+  const remediation = useMemo(() => steps.filter((s) => s.phase === "REMEDIATION"), [steps]);
+  const checks = useMemo(() => steps.filter((s) => s.phase === "VERIFICATION"), [steps]);
+  const [fixOn, setFixOn] = useState(false);
+  const [applied, setApplied] = useState(0);
+  const fixDone = fixOn && applied >= remediation.length;
+
+  useEffect(() => {
+    if (!fixOn || applied >= remediation.length) return;
+    const t = setTimeout(() => setApplied((n) => n + 1), FIX_MS);
+    return () => clearTimeout(t);
+  }, [fixOn, applied, remediation.length]);
+
+  const startFix = () => {
+    setReplayOn(false);
+    setPlaying(false);
+    setIndex(last);
+    setApplied(0);
+    setFixOn(true);
+  };
+
+  useEffect(() => {
+    if (!fixSignal) return;
+    startFix();
+    root.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [fixSignal]);
+
+  const fix = useMemo(() => {
+    if (!fixOn) return undefined;
+    const out: Record<string, FixState> = {};
+    for (const s of remediation.slice(0, applied)) {
+      const state = FIX_OF[s.operation];
+      const key = `${s.system_id}|${s.resource_id}`.toLowerCase();
+      for (const n of lineage.nodes) {
+        if (state && `${n.system_id}|${n.resource_id}`.toLowerCase() === key) out[n.id] = state;
+      }
+    }
+    return out;
+  }, [fixOn, remediation, applied, lineage]);
+  const onMap = (s: Step) =>
+    lineage.nodes.some((n) => `${n.system_id}|${n.resource_id}`.toLowerCase() === `${s.system_id}|${s.resource_id}`.toLowerCase());
+
   const startReplay = () => {
+    setFixOn(false);
     setReplayOn(true);
     setIndex(0);
     setPlaying(true);
@@ -359,7 +462,80 @@ export default function LineageExplorer({
         </div>
       )}
 
-      <LineageMap lineage={lineage} timeState={states} at={at} pulse={pulse} />
+      {fixOn && (
+        <div
+          className="sticky top-16 z-10 mb-5 rounded-lg border border-white/15 bg-surface/95 p-4 shadow-lg backdrop-blur"
+          role="region"
+          aria-label="Simulate the fix"
+        >
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <p className="text-xs uppercase tracking-wide text-muted">
+              Simulating the fix · step {Math.min(applied, remediation.length)} of {remediation.length} · visual only
+            </p>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={startFix}
+                className="rounded-md border border-white/15 bg-white/[0.06] px-3 py-1 text-xs text-ink hover:bg-white/10"
+              >
+                Reset
+              </button>
+              <button
+                type="button"
+                onClick={() => setFixOn(false)}
+                aria-label="Close the simulation"
+                className="rounded-md px-2 py-1 text-xs text-muted hover:text-ink"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <LineageMap lineage={lineage} timeState={states} at={at} pulse={pulse} fix={fix} />
+
+      {fixOn && (
+        <div className="mt-4 rounded-lg border border-white/10 bg-white/[0.02] p-4" aria-live="polite">
+          <p className="text-xs uppercase tracking-wide text-muted">Remediation plan</p>
+          {applied === 0 && <p className="mt-2 text-sm text-muted">Starting from the state at the audit time…</p>}
+          <ol className="mt-2 space-y-1.5 text-sm">
+            {remediation.slice(0, applied).map((s, i) => (
+              <li key={s.step_no} className={`flex gap-2 ${i === applied - 1 && !fixDone ? "text-ink" : "text-ink-2"}`}>
+                <span className="w-14 shrink-0 tabular-nums text-muted">Step {s.step_no}</span>
+                <span>
+                  {stepText(s)}
+                  {!onMap(s) && <span className="text-muted"> (not drawn on the map)</span>}
+                </span>
+              </li>
+            ))}
+          </ol>
+
+          {fixDone && (
+            <>
+              {checks.length > 0 && (
+                <>
+                  <p className="mt-5 text-xs uppercase tracking-wide text-muted">Then these checks must pass</p>
+                  <ul className="mt-2 space-y-1.5 text-sm">
+                    {checks.map((s) => (
+                      <li key={s.step_no} className="flex gap-2 text-[#5fd35f]">
+                        <span aria-hidden className="font-semibold">✓</span>
+                        <span>{checkText(s)}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
+              <div className="mt-5 rounded-lg border border-[#0ca30c]/50 bg-[#0ca30c]/10 px-4 py-3">
+                <p className="text-base font-semibold text-[#5fd35f]">After this plan: COMPLETE</p>
+                <p className="mt-1 text-xs text-muted">
+                  A simulation of TRACE&apos;s plan, assuming every step and check succeeds. Nothing was changed.
+                </p>
+              </div>
+            </>
+          )}
+        </div>
+      )}
 
       <div className="mt-6 rounded-lg border border-white/10 bg-white/[0.02] p-4">
         <div className="flex flex-wrap items-center justify-between gap-3">

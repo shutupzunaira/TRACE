@@ -26,6 +26,20 @@ const C = {
   restore: "#ec835a", // serious: a backup can bring data back
   pulseClaim: "#e8b43a", // replay: a reported claim touches this box (amber)
   pulseProof: "#e5484d", // replay: direct evidence about this box (red)
+  fixed: "#0ca30c", // simulated fix: redacted / anonymized (green)
+  fixedFill: "#16301a",
+  disabledFill: "#2a2a28",
+};
+
+/** "Simulate the fix": the state a remediation step leaves a box in (visual only). */
+export type FixState = "disabled" | "blocked" | "deleted" | "redacted" | "anonymized";
+
+const FIX_TEXT: Record<FixState, string> = {
+  disabled: "■ disabled · simulated",
+  blocked: "restore blocked · simulated",
+  deleted: "deleted · simulated",
+  redacted: "✓ redacted · simulated",
+  anonymized: "✓ anonymized · simulated",
 };
 
 type Placed = LineageNode & { x: number; y: number };
@@ -75,6 +89,7 @@ export default function LineageMap({
   timeState,
   at,
   pulse,
+  fix,
 }: {
   lineage: Lineage;
   /** time-travel mode: state of each node id at the slider's moment */
@@ -83,6 +98,8 @@ export default function LineageMap({
   at?: string;
   /** replay mode: boxes the current moment's events are about, ringed amber (claim) or red (proof) */
   pulse?: Record<string, "claim" | "proof">;
+  /** "Simulate the fix": boxes changed by the remediation steps applied so far */
+  fix?: Record<string, FixState>;
 }) {
   const [selected, setSelected] = useState<string | null>(null);
   const [hovered, setHovered] = useState<string | null>(null);
@@ -187,11 +204,17 @@ export default function LineageMap({
           {/* Nodes */}
           {placed.map((n) => {
             const isActive = n.id === activeId;
-            const flow = n.active_flow?.active_at_audit;
-            const restore = n.restore_risk?.active_at_audit;
+            const fx = fix?.[n.id];
+            const flow = n.active_flow?.active_at_audit && fx !== "disabled";
+            const restore = n.restore_risk?.active_at_audit && fx !== "blocked";
+            const green = fx === "redacted" || fx === "anonymized";
             const t = timeState?.[n.id];
             const present = t?.state === "present";
-            const ring = flow
+            const ring = green
+              ? C.fixed
+              : fx === "disabled" || fx === "deleted"
+                ? C.border
+                : flow
               ? C.flow
               : restore
                 ? C.restore
@@ -200,12 +223,23 @@ export default function LineageMap({
                   : isActive
                     ? "rgba(255,255,255,0.55)"
                     : C.border;
-            const third = t
+            const third = fx
+              ? FIX_TEXT[fx]
+              : t
               ? `${TIME_TEXT[t.state === "none" ? "none" : `${t.state}-${t.basis}`]}${t.evidence_id ? ` · ${t.evidence_id}` : ""}`
               : n.source === "evidence"
                 ? trunc(n.file_ids.join(", "), 30)
                 : "named in activity log only";
-            const opacity = !t || present || pulse?.[n.id] ? 1 : t.state === "absent" ? 0.55 : 0.35;
+            const opacity =
+              fx === "deleted"
+                ? 0.12
+                : fx === "disabled"
+                  ? 0.6
+                  : fx || !t || present || pulse?.[n.id]
+                    ? 1
+                    : t.state === "absent"
+                      ? 0.55
+                      : 0.35;
             return (
               <g
                 key={n.id}
@@ -227,7 +261,7 @@ export default function LineageMap({
                 }}
                 className="cursor-pointer outline-none"
                 opacity={opacity}
-                style={{ transition: "opacity 250ms" }}
+                style={{ transition: fix ? "opacity 600ms" : "opacity 250ms" }}
               >
                 {pulse?.[n.id] && (
                   <rect
@@ -247,9 +281,9 @@ export default function LineageMap({
                   width={COL_W}
                   height={NODE_H}
                   rx={8}
-                  fill={isActive ? C.nodeSelected : C.node}
+                  fill={green ? C.fixedFill : fx === "disabled" ? C.disabledFill : isActive ? C.nodeSelected : C.node}
                   stroke={ring}
-                  strokeWidth={flow || restore || present ? 2 : 1}
+                  strokeWidth={green || flow || restore || (present && !fx) ? 2 : 1}
                   strokeDasharray={
                     present && t?.basis === "claim" ? "5 3" : n.source === "activity" ? "4 3" : undefined
                   }
@@ -263,7 +297,7 @@ export default function LineageMap({
                 <text
                   x={12}
                   y={56}
-                  fill={present ? C.ink : C.muted}
+                  fill={green ? C.fixed : fx ? C.ink2 : present ? C.ink : C.muted}
                   fontSize={11}
                   fontFamily={!t && n.source === "evidence" ? "ui-monospace, SFMono-Regular, Menlo, monospace" : undefined}
                 >
@@ -281,6 +315,13 @@ export default function LineageMap({
                   >
                     LEGAL HOLD
                   </text>
+                )}
+                {fx === "blocked" && (
+                  <g transform={`translate(${COL_W - 24},42)`} aria-label="restore blocked">
+                    <path d="M3,7 V4.5 a4,4 0 0 1 8,0 V7" fill="none" stroke={C.ink} strokeWidth={1.6} />
+                    <rect x={1} y={7} width={12} height={9} rx={2} fill={C.ink} />
+                    <circle cx={7} cy={11.5} r={1.4} fill={C.node} />
+                  </g>
                 )}
                 {n.claims.length > 0 && (
                   <g transform={`translate(${COL_W - 16},14)`}>

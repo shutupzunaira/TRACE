@@ -2576,3 +2576,23 @@ branch=main
 repo_root=/Users/admin/Documents/TRACE/TRACE
 worktree=main
 parent_agent=none
+
+## [2026-11-05T07:48:07Z] Add "Simulate the fix" to the case page
+
+User Prompt (verbatim, secrets redacted):
+Add a “Simulate the fix” button on the case page for INCOMPLETE cases. It steps through the case’s remediation steps from steps_json, one per second: DISABLE_DATA_FLOW turns the flow box grey (“disabled”), BLOCK_RESTORE puts a lock on the backup box, DELETE_RECORD fades the box out, REDACT_RECORD and ANONYMIZE_RECORD turn it green with a “redacted” or “anonymized” label. Show each step’s text underneath. At the end, show the verification checks as a green checklist, and the banner “After this plan: COMPLETE”. Add a Reset button. This is a visual simulation only: don’t change any data or the API. Run npm run build only. Don’t run Python tests, mobile emulation or screenshots. Final report under 10 lines, including what to click on case_263.
+
+Agent Response Summary:
+Added a "Simulate the fix" button (INCOMPLETE cases with REMEDIATION steps) next to "Replay the ghost". LineageExplorer moves the slider to audit time and applies one remediation step per second. LineageMap got a visual-only fix overlay: disabled = grey, blocked = lock icon, deleted = faded, redacted/anonymized = green with a label. Plain-English step text appears under the map; at the end the VERIFICATION steps show as a green checklist with "After this plan: COMPLETE". Reset and Close controls; starting a replay cancels the simulation and the reverse. No data or API changes. npm run build passed. Not committed.
+
+Actions:
+* Edited web/app/cases/[id]/page.tsx, web/components/LineageExplorer.tsx, web/components/LineageMap.tsx
+* cd web && npm run build
+
+Context:
+tool=Claude Code
+model=claude-opus-5-5
+branch=main
+repo_root=/Users/admin/Documents/TRACE/TRACE
+worktree=main
+parent_agent=none
