@@ -219,7 +219,7 @@
       },
       {
         "id": "backup",
-        "label": "Backups & archives"
+        "label": "Backups, archives & legal holds"
       }
     ],
     "nodes": [
@@ -247,7 +247,8 @@
           "active_at_audit": true,
           "evidence_id": "evidence_47"
         },
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "replica"
       },
       {
         "id": "integration_service|data_flow_5281|customer_data_reporting_replica",
@@ -269,7 +270,8 @@
         "last_captured_at": "2026-02-08T07:00:00Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "replica"
       },
       {
         "id": "search_service|search_2591|",
@@ -293,7 +295,8 @@
         "last_captured_at": "2026-02-08T07:00:00Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "replica"
       },
       {
         "id": "search_service|search_2591|customer_data_reporting_replica",
@@ -317,7 +320,8 @@
         "last_captured_at": "2026-02-08T07:00:00Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "replica"
       },
       {
         "id": "security_service|audit_record_3441|",
@@ -339,7 +343,8 @@
         "last_captured_at": "2026-02-08T07:00:00Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "replica"
       },
       {
         "id": "security_service|audit_record_3441|customer_data_reporting_replica",
@@ -361,7 +366,8 @@
         "last_captured_at": "2026-02-08T07:00:00Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "replica"
       },
       {
         "id": "legal_service|legal_hold_2227|",
@@ -383,7 +389,8 @@
         "last_captured_at": "2026-02-08T07:00:00Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "legal hold"
       },
       {
         "id": "legal_service|legal_hold_2227|customer_data_reporting_replica",
@@ -405,7 +412,8 @@
         "last_captured_at": "2026-02-08T07:00:00Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "legal hold"
       }
     ],
     "edges": [

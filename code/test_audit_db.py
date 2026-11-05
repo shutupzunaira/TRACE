@@ -506,6 +506,15 @@ class TestMainSavesCases(DbTestCase):
         origin = self.q("SELECT origin FROM evidence_hits WHERE file_id = 'evidence_94'")
         self.assertTrue(origin and origin[0]["origin"])
 
+    def test_sample_run_does_not_touch_audit_db(self):
+        """The website DB holds only the real 518-case run, never the 32 samples."""
+        out = Path(self.tmp.name) / "samples.csv"
+        with mock.patch.object(self.main.audit_db, "connect") as connect, \
+             redirect_stderr(io.StringIO()), mock.patch("sys.stdout", io.StringIO()):
+            self.main.main(["--requests", "sample_deletion_requests.csv", "--output", str(out)])
+        connect.assert_not_called()
+        self.assertEqual(len(out.read_text().splitlines()), 33)
+
     def test_closed_connection_only_warns(self):
         self.conn.close()
         (status, _, _, failed), err = self.run_case(self.MAIN_CASE, self.conn)

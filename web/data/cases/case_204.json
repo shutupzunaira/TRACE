@@ -183,7 +183,7 @@
       },
       {
         "id": "backup",
-        "label": "Backups & archives"
+        "label": "Backups, archives & legal holds"
       }
     ],
     "nodes": [
@@ -219,7 +219,8 @@
           "active_at_audit": false,
           "evidence_id": "evidence_20"
         },
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "replica"
       },
       {
         "id": "integration_service|data_flow_5877|customer_data_read_replica",
@@ -241,7 +242,8 @@
         "last_captured_at": "2026-07-08T09:00:00Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "replica"
       },
       {
         "id": "security_service|audit_record_2736|",
@@ -263,7 +265,8 @@
         "last_captured_at": "2026-07-08T09:00:00Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "replica"
       },
       {
         "id": "security_service|audit_record_2736|customer_data_read_replica",
@@ -285,7 +288,8 @@
         "last_captured_at": "2026-07-08T09:00:00Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "replica"
       },
       {
         "id": "support_platform|support_9505|",
@@ -307,7 +311,8 @@
         "last_captured_at": "2026-07-08T09:00:00Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "replica"
       },
       {
         "id": "support_platform|support_9505|customer_data_read_replica",
@@ -329,7 +334,8 @@
         "last_captured_at": "2026-07-08T09:00:00Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "replica"
       },
       {
         "id": "backup_service|backup_9519|",
@@ -362,7 +368,8 @@
         "restore_risk": {
           "active_at_audit": false,
           "evidence_id": "evidence_20"
-        }
+        },
+        "role": "backup"
       },
       {
         "id": "backup_service|backup_9519|customer_data_read_replica",
@@ -384,7 +391,8 @@
         "last_captured_at": "2026-07-08T09:00:00Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "backup"
       }
     ],
     "edges": [],

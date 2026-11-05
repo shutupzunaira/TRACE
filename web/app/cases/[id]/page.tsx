@@ -338,6 +338,35 @@ function CaseView({ c }: { c: CaseDetail }) {
         )}
       </Section>
 
+      {c.our_status !== "NOT_APPLICABLE" && (
+        <Section title="Decision per record" count={c.resources.length}>
+          {c.resources.length === 0 ? (
+            <Empty>No records were assessed by the policy engine for this case.</Empty>
+          ) : (
+            <Table head={["System", "Resource", "Category", "Policy requires", "State at audit", "Result", "Evidence"]}>
+              {c.resources.map((r) => (
+                <tr key={`${r.system_id}-${r.resource_id}`} className="border-b border-hairline last:border-0">
+                  <td className="py-2.5 pr-4">{r.system_id}</td>
+                  <td className="py-2.5 pr-4 font-mono text-xs text-ink">{r.resource_id}</td>
+                  <td className="py-2.5 pr-4 text-xs">{r.category}</td>
+                  <td className="py-2.5 pr-4 text-xs">{r.required_treatment}</td>
+                  <td className="py-2.5 pr-4 text-xs">{r.state_at_audit}</td>
+                  <td className="whitespace-nowrap py-2.5 pr-4 text-xs text-ink">
+                    <span
+                      aria-hidden
+                      className="mr-1.5 inline-block h-2 w-2 rounded-full"
+                      style={{ backgroundColor: r.satisfied ? "#0ca30c" : "#d03b3b" }}
+                    />
+                    {r.satisfied ? "Meets policy" : "Needs action"}
+                  </td>
+                  <td className="py-2.5 pr-4 font-mono text-xs">{r.evidence_ids[0] ?? <span className="text-muted">—</span>}</td>
+                </tr>
+              ))}
+            </Table>
+          )}
+        </Section>
+      )}
+
       <Section title="Steps" count={c.steps.length}>
         {c.steps.length === 0 ? (
           <Empty>

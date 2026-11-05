@@ -323,7 +323,7 @@
       },
       {
         "id": "backup",
-        "label": "Backups & archives"
+        "label": "Backups, archives & legal holds"
       }
     ],
     "nodes": [
@@ -350,7 +350,8 @@
         "last_captured_at": "2026-08-27T12:00:00Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "replica"
       },
       {
         "id": "analytics_platform|analytics_4882|customer_data_read_replica",
@@ -375,7 +376,8 @@
         "last_captured_at": "2026-08-27T12:00:00Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "replica"
       },
       {
         "id": "integration_service|data_flow_5127|",
@@ -409,7 +411,8 @@
           "active_at_audit": true,
           "evidence_id": "evidence_10"
         },
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "replica"
       },
       {
         "id": "integration_service|data_flow_5127|customer_data_read_replica",
@@ -431,7 +434,8 @@
         "last_captured_at": "2026-08-27T12:00:00Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "replica"
       },
       {
         "id": "search_service|search_8379|",
@@ -455,7 +459,8 @@
         "last_captured_at": "2026-08-27T12:00:00Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "replica"
       },
       {
         "id": "search_service|search_8379|customer_data_read_replica",
@@ -479,7 +484,8 @@
         "last_captured_at": "2026-08-27T12:00:00Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "replica"
       },
       {
         "id": "security_service|audit_record_6230|",
@@ -501,7 +507,8 @@
         "last_captured_at": "2026-08-27T12:00:00Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "replica"
       },
       {
         "id": "security_service|audit_record_6230|customer_data_read_replica",
@@ -523,7 +530,8 @@
         "last_captured_at": "2026-08-27T12:00:00Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "replica"
       },
       {
         "id": "support_platform|support_4267|",
@@ -546,7 +554,8 @@
         "last_captured_at": "2026-08-27T12:00:00Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "replica"
       },
       {
         "id": "support_platform|support_4267|customer_data_read_replica",
@@ -569,7 +578,8 @@
         "last_captured_at": "2026-08-27T12:00:00Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "replica"
       }
     ],
     "edges": [],

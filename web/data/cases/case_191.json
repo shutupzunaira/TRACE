@@ -149,7 +149,7 @@
       },
       {
         "id": "backup",
-        "label": "Backups & archives"
+        "label": "Backups, archives & legal holds"
       }
     ],
     "nodes": [
@@ -185,7 +185,8 @@
           "active_at_audit": false,
           "evidence_id": "evidence_83"
         },
-        "restore_risk": null
+        "restore_risk": null,
+        "role": ""
       },
       {
         "id": "security_service|audit_record_7493|",
@@ -207,7 +208,8 @@
         "last_captured_at": "2026-07-18T10:43:35Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": ""
       },
       {
         "id": "support_platform|support_5049|",
@@ -229,7 +231,8 @@
         "last_captured_at": "2026-07-18T10:43:35Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": ""
       },
       {
         "id": "backup_service|backup_3010|",
@@ -262,7 +265,8 @@
         "restore_risk": {
           "active_at_audit": false,
           "evidence_id": "evidence_83"
-        }
+        },
+        "role": "backup"
       }
     ],
     "edges": [],

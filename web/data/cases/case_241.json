@@ -141,7 +141,7 @@
       },
       {
         "id": "backup",
-        "label": "Backups & archives"
+        "label": "Backups, archives & legal holds"
       }
     ],
     "nodes": [
@@ -169,7 +169,8 @@
           "active_at_audit": true,
           "evidence_id": "evidence_79"
         },
-        "restore_risk": null
+        "restore_risk": null,
+        "role": ""
       },
       {
         "id": "search_service|search_5659|",
@@ -191,7 +192,8 @@
         "last_captured_at": "2026-06-23T05:37:26Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": ""
       }
     ],
     "edges": [

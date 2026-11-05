@@ -121,7 +121,7 @@
       },
       {
         "id": "backup",
-        "label": "Backups & archives"
+        "label": "Backups, archives & legal holds"
       }
     ],
     "nodes": [
@@ -156,7 +156,8 @@
         "restore_risk": {
           "active_at_audit": true,
           "evidence_id": "evidence_66"
-        }
+        },
+        "role": "backup"
       }
     ],
     "edges": [],

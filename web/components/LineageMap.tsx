@@ -236,7 +236,7 @@ export default function LineageMap({
                   }
                 />
                 <text x={12} y={21} fill={C.ink} fontSize={13} fontWeight={600}>
-                  {trunc(n.system_id, 26)}
+                  {trunc(n.system_id, n.role === "legal hold" ? 15 : 26)}
                 </text>
                 <text x={12} y={39} fill={C.ink2} fontSize={11.5} fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace">
                   {trunc(n.resource_id + (n.replica_or_table ? ` · ${n.replica_or_table}` : ""), 30)}
@@ -250,6 +250,19 @@ export default function LineageMap({
                 >
                   {trunc(third, 34)}
                 </text>
+                {n.role === "legal hold" && (
+                  <text
+                    x={COL_W - (n.claims.length > 0 ? 28 : 10)}
+                    y={21}
+                    fill={C.ink2}
+                    fontSize={9.5}
+                    fontWeight={600}
+                    letterSpacing="0.06em"
+                    textAnchor="end"
+                  >
+                    LEGAL HOLD
+                  </text>
+                )}
                 {n.claims.length > 0 && (
                   <g transform={`translate(${COL_W - 16},14)`}>
                     <circle r={5} fill="none" stroke={C.ink2} strokeWidth={1.5} />
@@ -295,6 +308,10 @@ function Legend() {
         <svg aria-hidden width="12" height="12"><circle cx="6" cy="6" r="5" fill="none" stroke={C.ink2} strokeWidth="1.5" /></svg>
         Flow / backup claims
       </li>
+      <li className={item}>
+        <span aria-hidden className="text-[9.5px] font-semibold tracking-wider text-ink-2">LEGAL HOLD</span>
+        Kept on purpose for a legal reason
+      </li>
     </ul>
   );
 }
@@ -318,7 +335,10 @@ function Details({
     const n = byId.get(id);
     return n ? `${n.system_id} · ${n.resource_id}` : id;
   };
-  const group = { primary: "Primary system", copy: "Copy", backup: "Backup / archive" }[node.group];
+  const group =
+    node.role === "legal hold"
+      ? "Legal hold: kept on purpose, not an ordinary copy"
+      : { primary: "Primary system", copy: "Copy", backup: "Backup / archive" }[node.group];
 
   return (
     <div className="mt-4 rounded-lg border border-white/10 bg-white/[0.03] p-4 text-sm" aria-live="polite">

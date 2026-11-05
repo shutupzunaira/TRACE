@@ -129,7 +129,7 @@
       },
       {
         "id": "backup",
-        "label": "Backups & archives"
+        "label": "Backups, archives & legal holds"
       }
     ],
     "nodes": [
@@ -153,7 +153,8 @@
         "last_captured_at": "2026-06-28T06:25:56Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": ""
       },
       {
         "id": "account_replication_cluster|account_5479|",
@@ -169,7 +170,8 @@
         "last_captured_at": "",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "replica"
       },
       {
         "id": "search_service|search_8764|",
@@ -191,7 +193,8 @@
         "last_captured_at": "2026-06-28T06:25:56Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": ""
       }
     ],
     "edges": [

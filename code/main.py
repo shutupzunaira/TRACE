@@ -192,12 +192,15 @@ def main(argv: list[str] | None = None) -> int:
     # One scanner (P2) and one policy context (P3) shared by every case
     configure(PolicyContext(DATASET_DIR, scanner=get_scanner(DATASET_DIR), resolver=resolver))
 
-    try:
-        db = audit_db.connect(audit_db.DEFAULT_DB_PATH)
-    except Exception as exc:  # noqa: BLE001 — output.csv must still be written
-        warn(f"could not open audit.db ({type(exc).__name__}: {exc}); "
-             "continuing without the database")
-        db = None
+    # audit.db feeds the website, so only the real 518-case run writes to it
+    # (a sample / evaluation run must not mix case_01..case_32 into the site)
+    db = None
+    if args.requests == "deletion_requests.csv":
+        try:
+            db = audit_db.connect(audit_db.DEFAULT_DB_PATH)
+        except Exception as exc:  # noqa: BLE001 — output.csv must still be written
+            warn(f"could not open audit.db ({type(exc).__name__}: {exc}); "
+                 "continuing without the database")
     lineage_src = None
     if db is not None:
         try:

@@ -366,7 +366,7 @@ def build_lineage(hits: list[dict], edges: list[dict], flows: list[dict],
             n["first_captured_at"] = captured
         if captured > n["last_captured_at"]:
             n["last_captured_at"] = captured
-    # the group may depend on all origins seen for a node
+    # the group and role may depend on all origins seen for a node
     for n in nodes.values():
         n["group"] = lineage.node_group(n["system_id"], n["origins"], n["replica_or_table"])
 
@@ -398,13 +398,17 @@ def build_lineage(hits: list[dict], edges: list[dict], flows: list[dict],
         find(r["system_id"], r["resource_id"])["restore_risk"] = {
             "active_at_audit": r["active_at_audit"], "evidence_id": r["evidence_id"]}
 
+    for n in nodes.values():
+        n["role"] = lineage.node_role(n["system_id"], n["resource_id"], n["origins"],
+                                      n["replica_or_table"])
+
     ordered = sorted(nodes.values(), key=lambda n: (
         lineage.GROUP_ORDER.index(n["group"]), n["system_id"], n["resource_id"],
         n["replica_or_table"]))
     return {
         "groups": [{"id": g, "label": label} for g, label in (
             (lineage.PRIMARY, "Primary systems"), (lineage.COPY, "Copies"),
-            (lineage.BACKUP, "Backups & archives"))],
+            (lineage.BACKUP, "Backups, archives & legal holds"))],
         "nodes": ordered,
         "edges": out_edges,
         "edge_note": "reported activity (claims)",

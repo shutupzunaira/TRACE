@@ -422,7 +422,7 @@
       },
       {
         "id": "backup",
-        "label": "Backups & archives"
+        "label": "Backups, archives & legal holds"
       }
     ],
     "nodes": [
@@ -449,7 +449,8 @@
         "last_captured_at": "2026-04-24T08:00:00Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "replica"
       },
       {
         "id": "analytics_platform|analytics_8011|customer_data_replica_ap_south",
@@ -474,7 +475,8 @@
         "last_captured_at": "2026-04-24T08:00:00Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "replica"
       },
       {
         "id": "analytics_platform|analytics_8011|customer_data_replica_eu_west",
@@ -499,7 +501,8 @@
         "last_captured_at": "2026-04-24T08:00:00Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "replica"
       },
       {
         "id": "integration_service|data_flow_3180|",
@@ -533,7 +536,8 @@
           "active_at_audit": true,
           "evidence_id": "evidence_33"
         },
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "replica"
       },
       {
         "id": "integration_service|data_flow_3180|customer_data_replica_ap_south",
@@ -555,7 +559,8 @@
         "last_captured_at": "2026-04-24T08:00:00Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "replica"
       },
       {
         "id": "integration_service|data_flow_3180|customer_data_replica_eu_west",
@@ -577,7 +582,8 @@
         "last_captured_at": "2026-04-24T08:00:00Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "replica"
       },
       {
         "id": "search_service|search_495|",
@@ -601,7 +607,8 @@
         "last_captured_at": "2026-04-24T08:00:00Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "replica"
       },
       {
         "id": "search_service|search_495|customer_data_replica_ap_south",
@@ -625,7 +632,8 @@
         "last_captured_at": "2026-04-24T08:00:00Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "replica"
       },
       {
         "id": "search_service|search_495|customer_data_replica_eu_west",
@@ -649,7 +657,8 @@
         "last_captured_at": "2026-04-24T08:00:00Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "replica"
       },
       {
         "id": "security_service|audit_record_5773|",
@@ -671,7 +680,8 @@
         "last_captured_at": "2026-04-24T08:00:00Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "replica"
       },
       {
         "id": "security_service|audit_record_5773|customer_data_replica_ap_south",
@@ -693,7 +703,8 @@
         "last_captured_at": "2026-04-24T08:00:00Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "replica"
       },
       {
         "id": "security_service|audit_record_5773|customer_data_replica_eu_west",
@@ -715,7 +726,8 @@
         "last_captured_at": "2026-04-24T08:00:00Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "replica"
       },
       {
         "id": "support_platform|support_2406|",
@@ -738,7 +750,8 @@
         "last_captured_at": "2026-04-24T08:00:00Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "replica"
       },
       {
         "id": "support_platform|support_2406|customer_data_replica_ap_south",
@@ -761,7 +774,8 @@
         "last_captured_at": "2026-04-24T08:00:00Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "replica"
       },
       {
         "id": "support_platform|support_2406|customer_data_replica_eu_west",
@@ -784,7 +798,8 @@
         "last_captured_at": "2026-04-24T08:00:00Z",
         "claims": [],
         "active_flow": null,
-        "restore_risk": null
+        "restore_risk": null,
+        "role": "replica"
       }
     ],
     "edges": [],

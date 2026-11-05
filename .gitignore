@@ -9,6 +9,6 @@ __pycache__/
 code/evidence/ocr_cache/*.tmp
 code.zip
 
-# local pipeline database: holds unmasked identifiers; only web/public/data is published
+# local pipeline database: holds unmasked identifiers; only the masked web/data export is published
 audit.db
 audit.db-journal

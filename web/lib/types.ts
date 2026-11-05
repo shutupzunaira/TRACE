@@ -84,6 +84,8 @@ export type LineageNode = {
   replica_or_table: string;
   source: "evidence" | "activity";
   group: "primary" | "copy" | "backup";
+  /** "legal hold" | "backup" | "archive" | "replica" | "" */
+  role?: string;
   file_ids: string[];
   origins: string[];
   matched_identifiers: string[];
@@ -142,6 +144,16 @@ export type LieDetectorData = {
   policy_engine_connected: boolean;
 };
 
+export type ResourceDecision = {
+  system_id: string;
+  resource_id: string;
+  category: string;
+  required_treatment: string;
+  state_at_audit: string;
+  satisfied: boolean;
+  evidence_ids: string[];
+};
+
 export type CaseDetail = CaseListItem & {
   request_text: string;
   confidence: string;
@@ -154,7 +166,7 @@ export type CaseDetail = CaseListItem & {
   identity_trail: TrailEntry[];
   evidence_hits: EvidenceHit[];
   lineage: Lineage;
-  resources: unknown[];
+  resources: ResourceDecision[];
   flows: unknown[];
   restore_risks: unknown[];
   timeline: TimelineEvent[];

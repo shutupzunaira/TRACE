@@ -81,6 +81,28 @@ def node_group(system_id: str, origins: Iterable[str] = (),
     return COPY
 
 
+_LEGAL_HINTS = ("legal", "retention")
+
+
+def node_role(system_id: str, resource_id: str = "", origins: Iterable[str] = (),
+              replica_or_table: Optional[str] = None) -> str:
+    """
+    A short label for a box, so special stores are not mistaken for ordinary
+    copies: "legal hold" (kept on purpose for a legal or retention reason),
+    "backup", "archive", "replica", or "" for everything else.
+    """
+    text = " ".join([system_id or "", resource_id or "", *[o or "" for o in origins]]).lower()
+    if any(h in text for h in _LEGAL_HINTS):
+        return "legal hold"
+    if "backup" in text:
+        return "backup"
+    if "archive" in text:
+        return "archive"
+    if replica_or_table or "replica" in text:
+        return "replica"
+    return ""
+
+
 @dataclass(frozen=True)
 class LineageEdge:
     activity_id: str

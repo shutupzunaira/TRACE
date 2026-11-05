@@ -56,6 +56,35 @@ class TestNodeGroup(unittest.TestCase):
                 self.assertEqual(node_group(*args), expected)
 
 
+class TestNodeRole(unittest.TestCase):
+
+    def test_roles(self):
+        cases = [
+            (("legal_service", "legal_hold_8049", ("customer_export_service",)), "legal hold"),
+            (("object_storage", "doc_1", ("legal_retention_service",)), "legal hold"),
+            (("backup_service", "backup_5165", ()), "backup"),
+            (("archive_service", "archive_1", ()), "archive"),
+            (("account_replication_cluster", "account_1", ()), "replica"),
+            (("account_service", "account_1", ()), ""),
+        ]
+        for args, expected in cases:
+            with self.subTest(args=args):
+                self.assertEqual(lineage.node_role(*args), expected)
+        self.assertEqual(lineage.node_role("account_service", "account_1", (), "read_replica"),
+                         "replica")
+
+    def test_legal_hold_box_is_labelled_in_export(self):
+        lin = ex.build_lineage(
+            hits=[{"file_id": "evidence_36", "system_id": "legal_service",
+                   "resource_id": "legal_hold_8049", "matched_identifier": "user_id:user_388",
+                   "captured_at": "2026-04-09T12:00:00Z", "replica_or_table": "",
+                   "origin": "customer_export_service"}],
+            edges=[], flows=[], restore_risks=[])
+        node = lin["nodes"][0]
+        self.assertEqual((node["group"], node["role"]), ("backup", "legal hold"))
+        self.assertEqual(lin["groups"][2]["label"], "Backups, archives & legal holds")
+
+
 class TestEdgeFromRow(unittest.TestCase):
     RES = {"account_1", "search_7", "data_flow_3", "backup_4"}
 

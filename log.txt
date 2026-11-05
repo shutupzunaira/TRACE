@@ -2522,3 +2522,37 @@ branch=p3-into-main
 repo_root=C:/Users/Admin/aiml/TRACE
 worktree=main
 parent_agent=none
+
+## [2026-11-05T07:33:18Z] SESSION START
+
+tool=Claude Code
+model=claude-opus-5-5
+Repo Root: /Users/admin/Documents/TRACE/TRACE
+Branch: main
+Worktree: main
+Parent Agent: none
+Language: py
+Time Remaining: not configured
+
+## [2026-11-05T07:34:35Z] Prompt 7: final polish, README, reports, code.zip, build, commit
+
+User Prompt (verbatim, secrets redacted):
+[Pasted message: session start (read AGENTS.md, SESSION START entry with exact tool and model ID; on main, final polish), then Prompt 7: "Final polish, quickly. I'm on main with the real results (153 / 355 / 10). 1. Identity trail: when old and new emails mask to the same string, label them "Email 1" / "Email 2 (current)". 2. Lineage map: label legal holds "legal hold", not archive copies. 3. README.md at the repo root: what TRACE does, the architecture (classify → resolve identity → find evidence → decide → explain), how to run the pipeline and the website, the Vercel deploy, and how to extend it. 4. Update evaluation_report.md with the final sample accuracy from the evaluator, and check usage_report.md matches the final run. 5. Run validate_output.py (must say VALID). Build code.zip excluding dataset/, web/node_modules, web/.next, audit.db, caches, .env and nested zips. 6. Run npm run build only. Don't run the Python test suite, mobile emulation or screenshots. Final report under 10 lines." Then: git add -A; git status; git commit -m "Final polish, README, reports"; git push.]
+
+Agent Response Summary:
+Items 1-3 were already in the uncommitted working tree from an earlier, unlogged session; reviewed them (IdentityTrail numbers look-alike masked emails "Email N (current)"; lineage.node_role + LineageMap "LEGAL HOLD" label; README covers all requested sections) and kept them. Ran code/evaluation/main.py: status 1.000, exact 0.500, sequence 0.500, step 0.829, F1 0.921, identical to evaluation_report.md; usage_report.md matches the final run (518 rows, 153/355/10, 0 model calls). validate_output.py: VALID; output.csv SHA-256 a215494b...97b6ef unchanged. Rebuilt code.zip (642 files, no excluded paths); npm run build succeeded. Fixed a stale .gitignore comment. The Python test suite was not run, as instructed.
+
+Actions:
+* Appended SESSION START and this entry to log.txt
+* python3 code/evaluation/main.py; python3 code/validate_output.py; status count + sha256 of output.csv
+* Edited .gitignore (comment); rebuilt code.zip with zip -r and exclusions
+* cd web && npm run build
+* git add -A; git commit; git push
+
+Context:
+tool=Claude Code
+model=claude-opus-5-5
+branch=main
+repo_root=/Users/admin/Documents/TRACE/TRACE
+worktree=main
+parent_agent=none

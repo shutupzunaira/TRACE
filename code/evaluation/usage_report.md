@@ -1,7 +1,9 @@
 # Usage Report — final full-dataset run
 
 Run that produced the submitted `output.csv`: `python code/main.py` over the 518 requests in
-`dataset/deletion_requests.csv`, on 2026-11-04 (wall time about 5 seconds on a laptop, 0 failed cases).
+`dataset/deletion_requests.csv`, re-run on 2026-11-05 (wall time about 9 seconds on a laptop,
+including the audit.db write for the website; 0 failed cases). Result: COMPLETE 153, INCOMPLETE 355,
+NOT_APPLICABLE 10, byte-identical to the 2026-11-04 run.
 
 ## Model usage
 
@@ -14,6 +16,7 @@ The final pipeline makes **no language-model calls**. Every stage is determinist
 | Evidence discovery | P2 (`code/evidence/`) | parsers for SQL, JSON, logs, PDF text (pypdf), text; screenshot text from the committed OCR cache (`ocr_mode="cache_only"`) | 0 |
 | Policy and evidence validation | P3 (`policy_engine.py`, `rules.py`, `activity.py`) | rule book loaded from `deletion_rules.csv`, evidence-state reconstruction | 0 |
 | Step building | `step_builder.py` | numbering and contract validation | 0 |
+| Website data (display only) | P1 (`audit_db.py`, `lineage.py`, `case_timeline.py`, `export_web_data.py`) | SQLite + static JSON export, masking | 0 |
 
 Screenshot text was produced earlier by P2 with the local RapidOCR engine (an ONNX OCR model, not
 a language model, no API and no tokens) and committed to `code/evidence/ocr_cache/`. The final run

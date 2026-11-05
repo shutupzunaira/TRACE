@@ -3,6 +3,9 @@ import { formatDay, type TrailEntry } from "@/lib/types";
 /** Request email -> older / newer emails, with the audit-log change between each. */
 export default function IdentityTrail({ trail }: { trail: TrailEntry[] }) {
   if (trail.length === 0) return null;
+  // Different addresses can look the same once masked (ja****@outlook.com twice).
+  // Then number them, so nobody reads the trail as one email.
+  const lookAlike = new Set(trail.map((t) => t.value)).size < trail.length;
 
   return (
     <div>
@@ -15,11 +18,17 @@ export default function IdentityTrail({ trail }: { trail: TrailEntry[] }) {
                 t.is_current ? "border-white/20 bg-white/[0.06]" : "border-dashed border-white/20"
               }`}
             >
+              {lookAlike && (
+                <span className="text-[11px] font-medium text-ink-2">
+                  Email {i + 1}
+                  {t.is_current ? " (current)" : ""}
+                </span>
+              )}
               <span className="font-mono text-sm text-ink">{t.value}</span>
               <span className="text-[11px] text-muted">
-                {[t.is_request && "request email", t.is_current ? "current" : "older email"]
+                {[t.is_request && "request email", !lookAlike && (t.is_current ? "current" : "older email")]
                   .filter(Boolean)
-                  .join(" · ")}
+                  .join(" · ") || (t.is_current ? "" : "older email")}
               </span>
             </span>
             {t.replaced_by && (
@@ -33,6 +42,11 @@ export default function IdentityTrail({ trail }: { trail: TrailEntry[] }) {
           </li>
         ))}
       </ol>
+      {lookAlike && (
+        <p className="mt-2 text-xs text-muted">
+          These are different addresses; they only look the same because they are masked.
+        </p>
+      )}
       {trail.length === 1 && (
         <p className="mt-2 text-xs text-muted">No email changes were recorded before the audit time.</p>
       )}

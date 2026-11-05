@@ -6,7 +6,11 @@ Reproduce every number in this report with:
 python code/evaluation/main.py                 # pipeline on the 32 public samples + scoring
 cd code && python -m pytest -q tests test_identity_resolver.py test_main.py test_request_classifier.py test_utils.py # 508 passed, 1 skipped, 592 subtests passed
 python code/main.py && python code/validate_output.py   # full 518-case run + contract check
+python -m unittest discover -s code -p "test_*.py"     # P1 suites (classifier, identity, main, website data)
 ```
+
+Re-verified on 2026-11-05: the sample metrics below are unchanged, `validate_output.py` reports
+VALID, and the full run gives COMPLETE 153 / INCOMPLETE 355 / NOT_APPLICABLE 10.
 
 The solution is fully deterministic (no model calls, no randomness). Two consecutive full runs
 produce byte-identical `output.csv` files (verified by SHA-256).
@@ -135,6 +139,15 @@ Failures found on the **evaluation** set by inspecting decisions (no labels used
   document reference or file name).
 * `case_53`: a support-ticket screenshot (agent conversation with an order number) was deleted; the
   OCR text is now checked for conversation/order context, so it is redacted.
+
+Found during the final check (2026-11-05):
+
+* **Missing `pypdf` silently changes an answer.** In a Python environment without `pypdf`, PDF
+  evidence is skipped and `case_33` flips from INCOMPLETE (export_1842, cited from the PDF
+  `evidence_18`) to COMPLETE with no steps. The README now lists `pypdf` as required, and the
+  final run was made with `pypdf==6.21.4` installed.
+* **Sample runs polluted the website data.** `code/evaluation/main.py` also wrote the 32 sample
+  cases into `audit.db`. `main.py` now writes `audit.db` only for the real 518-case run.
 
 Changes made to teammates' code: none to P1/P2 logic. In P1's `test_main.py`, two assertions that
 encoded placeholder output (`("INCOMPLETE", "[]")`) were replaced by the test's stated intent (the case
