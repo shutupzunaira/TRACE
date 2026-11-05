@@ -215,6 +215,15 @@ function CaseView({ c }: { c: CaseDetail }) {
             Replay the ghost
           </button>
         )}
+        <Link
+          href={`/cases/${encodeURIComponent(c.case_id)}/certificate`}
+          className="inline-flex items-center gap-2 rounded-full border border-white/20 px-4 py-2 text-sm font-medium text-ink-2 hover:bg-white/[0.08] hover:text-ink"
+        >
+          <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden>
+            <path d="M6 1 V8 M3 5 L6 8 L9 5 M1.5 11 H10.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
+          </svg>
+          Download audit certificate
+        </Link>
         {canFix && (
           <button
             type="button"

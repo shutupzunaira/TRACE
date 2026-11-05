@@ -2596,3 +2596,85 @@ branch=main
 repo_root=/Users/admin/Documents/TRACE/TRACE
 worktree=main
 parent_agent=none
+
+## [2026-11-05T07:55:08Z] Add printable audit certificate page
+
+User Prompt (verbatim, secrets redacted):
+Add a “Download audit certificate” button on the case page that opens /cases/[id]/certificate: a clean, printable one-page report with the TRACE name, case ID, masked email, the shop’s claim vs our verdict, the request decision and reason, the evidence list (file IDs), the remediation and verification steps, the audit time, and a “Fingerprint”: the SHA-256 of the case’s JSON data, computed in the browser, with a note “any change to the data changes this fingerprint”. Add a “Print / Save as PDF” button that uses the browser’s print dialog, with print-friendly styles (white background). Don’t change the data or the API. Run npm run build only. Don’t run Python tests, mobile emulation or screenshots. Final report under 10 lines.
+
+Agent Response Summary:
+Added a "Download audit certificate" link to the case header and a new client page web/app/cases/[id]/certificate/page.tsx. It fetches the existing /api/cases/[id], hashes the exact response text with crypto.subtle SHA-256, and renders a white A4-style sheet: TRACE name, case ID, masked email, requested and audit times, claim vs verdict, request decision and reason, unique evidence file IDs, the remediation and verification steps table, the fingerprint and its note. "Print / Save as PDF" calls window.print(); print CSS in globals.css forces a white background and hides the nav and buttons; document.title sets the default PDF file name. No data or API changes. npm run build passed. Not committed.
+
+Actions:
+* Created web/app/cases/[id]/certificate/page.tsx; edited web/app/cases/[id]/page.tsx and web/app/globals.css
+* cd web && npm run build
+
+Context:
+tool=Claude Code
+model=claude-opus-5-5
+branch=main
+repo_root=/Users/admin/Documents/TRACE/TRACE
+worktree=main
+parent_agent=none
+
+## [2026-11-05T08:04:22Z] Detailed project summary (read-only)
+
+User Prompt (verbatim, secrets redacted):
+GIVE A CETILED SUMMARY OF THIS PROJECT OF EVERY NOOK AND CRANY. I MUST UNDERSTAND EVERYTHING ABOUT IT
+
+Agent Response Summary:
+Read-only walkthrough of the repository: the challenge, dataset, the five-stage pipeline (classifier, identity resolver, evidence scanner, policy engine with rules/activity, step builder), audit.db and the web export, the Next.js site and its features, evaluation results, tests, submission artifacts and the current repo state. Flagged that code.zip predates the replay, simulate-fix and certificate features, that the certificate page is still uncommitted, and that web/app 2 is an empty stray folder. No files changed except this log entry.
+
+Actions:
+* git log/status; ls/wc/head/cut over dataset/, code/ and web/; read module docstrings and decide()
+* Appended this entry to log.txt
+
+Context:
+tool=Claude Code
+model=claude-opus-5-5
+branch=main
+repo_root=/Users/admin/Documents/TRACE/TRACE
+worktree=main
+parent_agent=none
+
+## [2026-11-05T08:09:31Z] Project summary as a PDF
+
+User Prompt (verbatim, secrets redacted):
+GIVE IN PDF FORM
+
+Agent Response Summary:
+Turned the project summary into an 8-page A4 PDF using reportlab, installed in a scratchpad venv (the system Python was not changed). Sections: cover with headline numbers, the problem, dataset and traps, architecture, each stage, the 15 rules, website and innovation features, evaluation, running and submission, interview cheat sheet. Rendered pages to check the layout and replaced an overflowing code diagram with a table. Saved outside the repo so it is not committed or zipped.
+
+Actions:
+* Wrote the generator script in the scratchpad; created a venv with reportlab==4.2.5
+* Wrote /Users/admin/Documents/TRACE/TRACE_Project_Summary.pdf; rendered pages with qlmanage to check them
+* Appended this entry to log.txt
+
+Context:
+tool=Claude Code
+model=claude-opus-5-5
+branch=main
+repo_root=/Users/admin/Documents/TRACE/TRACE
+worktree=main
+parent_agent=none
+
+## [2026-11-05T08:13:11Z] Combine guide and all project docs into one PDF and open it
+
+User Prompt (verbatim, secrets redacted):
+combine everything into a pdf and open it right now
+
+Agent Response Summary:
+Read "everything" as the 8-page project guide plus the project's own Markdown documents. Rendered README, problem_statement, evaluation_report, usage_report, CONTRACTS, P4_CONTRACT_CONFIRMATION, README_identity, evidence/README and AGENTS.md as appendices A-I using a small Markdown-to-reportlab converter. Merged them after the guide into one 44-page PDF with bookmarks, checked rendered pages (fixed bold around inline code, table column widths and code-line wrapping), and opened it. log.txt and the dataset are excluded. Saved outside the repo.
+
+Actions:
+* Wrote the appendix generator in the scratchpad; installed pypdf in the scratch venv
+* Wrote /Users/admin/Documents/TRACE/TRACE_Complete_Project.pdf; rendered pages with qlmanage to check; open
+* Appended this entry to log.txt
+
+Context:
+tool=Claude Code
+model=claude-opus-5-5
+branch=main
+repo_root=/Users/admin/Documents/TRACE/TRACE
+worktree=main
+parent_agent=none

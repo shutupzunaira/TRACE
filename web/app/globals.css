@@ -31,3 +31,36 @@ body {
 :lang(ko) {
   font-family: ui-sans-serif, system-ui, "Hiragino Sans", "Apple SD Gothic Neo", "Noto Sans CJK JP", "Noto Sans CJK KR", sans-serif;
 }
+
+/* Audit certificate: print as a clean white page (nav and buttons hidden) */
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+  :root {
+    color-scheme: light;
+  }
+  body {
+    background: #fff !important;
+    color: #111 !important;
+  }
+  .no-print,
+  body > header {
+    display: none !important;
+  }
+  .certificate-page {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+  .certificate {
+    box-shadow: none !important;
+    border-radius: 0;
+    padding: 0 !important;
+  }
+  .certificate * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
