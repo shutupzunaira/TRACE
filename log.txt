@@ -2556,3 +2556,23 @@ branch=main
 repo_root=/Users/admin/Documents/TRACE/TRACE
 worktree=main
 parent_agent=none
+
+## [2026-11-05T07:43:00Z] Add "Replay the ghost" to the case page
+
+User Prompt (verbatim, secrets redacted):
+Add a “Replay the ghost” button at the top of the case page. When clicked, it plays the existing time slider from start to audit_at automatically, with a caption box that explains each event in plain English, e.g. “Sep 9 · The shop’s deletion worker reports SUCCESS (claim)”, “Sep 9 · Deleting the search copy FAILED (claim)”, “Oct 1 · Direct evidence proves the data is still in 4 systems (proof)”. Claims show in amber and proof in red. Highlight the matching boxes on the lineage map as it plays. At the end, show a final card: “The shop said: COMPLETE · TRACE found: INCOMPLETE · N records still exposed”. Add Pause and Restart. Reuse the existing slider and timeline data; don’t change the data or the API. Run npm run build only. Don’t run Python tests, mobile emulation or screenshots. Final report under 10 lines, including what to click on case_263.
+
+Agent Response Summary:
+Added a "Replay the ghost" button to the case header. It bumps a signal that LineageExplorer uses to drive its existing slider index from the first moment to audit_at. Each moment gets a sticky caption box: claims in amber, proof of data present in red, proof of absence and records in neutral; same-moment proofs are grouped into one line ("still in N systems"). The replay lingers longer on claim/proof moments. Matching LineageMap boxes get an amber/red ring. The final card shows reported vs TRACE status and the count of unsatisfied resources. Pause/Resume, Restart and Close controls. No data, export or API changes. npm run build passed. Not committed.
+
+Actions:
+* Edited web/app/cases/[id]/page.tsx, web/components/LineageExplorer.tsx, web/components/LineageMap.tsx
+* cd web && npm run build
+
+Context:
+tool=Claude Code
+model=claude-opus-5-5
+branch=main
+repo_root=/Users/admin/Documents/TRACE/TRACE
+worktree=main
+parent_agent=none

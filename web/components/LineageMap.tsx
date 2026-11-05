@@ -24,6 +24,8 @@ const C = {
   claim: "#898781",
   flow: "#d03b3b", // critical: an active flow can recreate data
   restore: "#ec835a", // serious: a backup can bring data back
+  pulseClaim: "#e8b43a", // replay: a reported claim touches this box (amber)
+  pulseProof: "#e5484d", // replay: direct evidence about this box (red)
 };
 
 type Placed = LineageNode & { x: number; y: number };
@@ -72,12 +74,15 @@ export default function LineageMap({
   lineage,
   timeState,
   at,
+  pulse,
 }: {
   lineage: Lineage;
   /** time-travel mode: state of each node id at the slider's moment */
   timeState?: Record<string, NodeTime>;
   /** ISO time of the slider; arrows reported later are faded */
   at?: string;
+  /** replay mode: boxes the current moment's events are about, ringed amber (claim) or red (proof) */
+  pulse?: Record<string, "claim" | "proof">;
 }) {
   const [selected, setSelected] = useState<string | null>(null);
   const [hovered, setHovered] = useState<string | null>(null);
@@ -200,7 +205,7 @@ export default function LineageMap({
               : n.source === "evidence"
                 ? trunc(n.file_ids.join(", "), 30)
                 : "named in activity log only";
-            const opacity = !t || present ? 1 : t.state === "absent" ? 0.55 : 0.35;
+            const opacity = !t || present || pulse?.[n.id] ? 1 : t.state === "absent" ? 0.55 : 0.35;
             return (
               <g
                 key={n.id}
@@ -224,6 +229,20 @@ export default function LineageMap({
                 opacity={opacity}
                 style={{ transition: "opacity 250ms" }}
               >
+                {pulse?.[n.id] && (
+                  <rect
+                    x={-5}
+                    y={-5}
+                    width={COL_W + 10}
+                    height={NODE_H + 10}
+                    rx={12}
+                    fill="none"
+                    stroke={pulse[n.id] === "proof" ? C.pulseProof : C.pulseClaim}
+                    strokeWidth={3}
+                    className="motion-safe:animate-pulse"
+                    aria-hidden
+                  />
+                )}
                 <rect
                   width={COL_W}
                   height={NODE_H}

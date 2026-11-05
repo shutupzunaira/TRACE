@@ -186,14 +186,31 @@ export default function CasePage() {
 function CaseView({ c }: { c: CaseDetail }) {
   const current = c.identities.filter((i) => !i.is_historical);
   const historical = c.identities.filter((i) => i.is_historical);
+  // "Replay the ghost": the button bumps this, LineageExplorer plays its slider with captions
+  const [replay, setReplay] = useState(0);
+  const canReplay = c.our_status !== "NOT_APPLICABLE" && c.lineage.nodes.length > 0 && c.timeline.length > 0;
 
   return (
     <div className="mt-4 space-y-6">
-      <header className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-        <h1 className="font-mono text-2xl font-semibold text-ink sm:text-3xl">{c.case_id}</h1>
-        <p className="text-sm text-muted">
-          Requested {formatUtc(c.requested_at)} · Audited at {formatUtc(c.audit_at)}
-        </p>
+      <header className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+        <div>
+          <h1 className="font-mono text-2xl font-semibold text-ink sm:text-3xl">{c.case_id}</h1>
+          <p className="mt-1 text-sm text-muted">
+            Requested {formatUtc(c.requested_at)} · Audited at {formatUtc(c.audit_at)}
+          </p>
+        </div>
+        {canReplay && (
+          <button
+            type="button"
+            onClick={() => setReplay((n) => n + 1)}
+            className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/[0.08] px-4 py-2 text-sm font-medium text-ink hover:bg-white/[0.14]"
+          >
+            <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden>
+              <path d="M2 1 L11 6 L2 11 Z" fill="currentColor" />
+            </svg>
+            Replay the ghost
+          </button>
+        )}
       </header>
 
       <VerdictBanner c={c} />
@@ -308,6 +325,12 @@ function CaseView({ c }: { c: CaseDetail }) {
             lineage={c.lineage}
             timeline={c.timeline}
             auditAt={c.timeline.find((e) => e.event === "AUDIT")?.time ?? c.audit_at}
+            replaySignal={replay}
+            outcome={{
+              reported: c.reported_status,
+              ours: c.our_status,
+              exposed: c.resources.filter((r) => !r.satisfied).length,
+            }}
           />
           <p className="mt-4 text-xs text-muted">
             Arrows come from the shop&apos;s activity log, so they are reported activity (claims), not proof. They are shown
