@@ -116,14 +116,14 @@ dicts (it reads `email` and `audit_at` from each row) and returns
 ## Tests
 
 ```text
-python3 -m unittest discover -s code -p "test_*.py" -v   # all 167 tests
+python3 -m pytest tests -v                              # whole suite (run from the repo root)
 
-python3 code/test_utils.py                # 13 tests
-python3 code/test_identity_resolver.py    # 66 tests
-python3 code/test_request_classifier.py   # 31 tests, 64 made-up sentences, language + reason
-python3 code/test_main.py                 # 18 tests: one bad case never stops the run, P2 -> P3 contract, audit_at hand-over
-python3 code/test_audit_db.py             # 22 tests: audit.db tables, save_case(), re-runs, DB errors in main.py
-python3 code/test_export_web_data.py      # 17 tests: JSON export and masking
+python3 tests/test_utils.py                # 13 tests
+python3 tests/test_identity_resolver.py    # 66 tests
+python3 tests/test_request_classifier.py   # 31 tests, 64 made-up sentences, language + reason
+python3 tests/test_main.py                 # 18 tests: one bad case never stops the run, P2 -> P3 contract, audit_at hand-over
+python3 tests/test_audit_db.py             # 22 tests: audit.db tables, save_case(), re-runs, DB errors in main.py
+python3 tests/test_export_web_data.py      # 17 tests: JSON export and masking
 ```
 
 ## For P3

@@ -2,9 +2,9 @@
 test_identity_resolver.py — unit tests for IdentityResolver.
 
 Run from the repo root with:
-    python3 -m pytest code/test_identity_resolver.py -v
+    python3 -m pytest tests/test_identity_resolver.py -v
 or:
-    python3 code/test_identity_resolver.py
+    python3 tests/test_identity_resolver.py
 """
 from __future__ import annotations
 
@@ -19,7 +19,7 @@ from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
 # Allow importing sibling modules when run directly
-sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "code"))
 
 from identity_resolver import IdentityResolver, _sha256
 from models import IdentityBundle, IdentityChange

@@ -2,7 +2,7 @@
 test_audit_db.py — tests for audit_db.py and the save_case() call in main.py.
 
 Run from the repo root with:
-    python3 code/test_audit_db.py
+    python3 tests/test_audit_db.py
 """
 from __future__ import annotations
 
@@ -18,7 +18,7 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest import mock
 
-sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "code"))
 
 import audit_db
 from models import ClassificationResult, IdentityBundle, IdentityChange

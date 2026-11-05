@@ -2,7 +2,7 @@
 test_utils.py — tests for the shared timestamp parser.
 
 Run from the repo root with:
-    python3 code/test_utils.py
+    python3 tests/test_utils.py
 """
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ from contextlib import redirect_stderr
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "code"))
 
 from utils import parse_ts, to_utc
 

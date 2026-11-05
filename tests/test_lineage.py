@@ -2,7 +2,7 @@
 test_lineage.py — tests for lineage.py (the website's data lineage map).
 
 Run from the repo root with:
-    python3 code/test_lineage.py
+    python3 tests/test_lineage.py
 """
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ import unittest
 from datetime import datetime, timezone
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "code"))
 
 import export_web_data as ex
 import lineage
@@ -219,7 +219,7 @@ class TestLineageIsDisplayOnly(unittest.TestCase):
         # The policy engine may read system_activity.csv itself (catalog links,
         # restore/flow risk signals); what it must never do is use this
         # display-only lineage map, so it must not import the lineage module.
-        src = (Path(__file__).parent / "policy_engine.py").read_text(encoding="utf-8")
+        src = (Path(__file__).resolve().parent.parent / "code" / "policy_engine.py").read_text(encoding="utf-8")
         self.assertIsNone(re.search(r"^\s*(import\s+lineage\b|from\s+lineage\b)", src, re.M))
 
     def test_restore_edge_into_backup_column(self):

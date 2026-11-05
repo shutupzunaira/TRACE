@@ -29,8 +29,22 @@ deletion_requests.csv
 
 `code/main.py` runs stages 1–5 and isolates every case: an error in one case writes `INCOMPLETE []`
 for that case and the run continues. Stage 5 never changes an answer. Interfaces between stages are
-in [`code/CONTRACTS.md`](code/CONTRACTS.md); identity and classification are documented in
-[`code/README_identity.md`](code/README_identity.md).
+in [`docs/CONTRACTS.md`](docs/CONTRACTS.md); identity and classification are documented in
+[`docs/README_identity.md`](docs/README_identity.md).
+
+## Repository layout
+
+```text
+code/          the pipeline: main.py (entry point) and every stage; code/evidence/ is the scanner
+dataset/       participant data (read-only input; not in code.zip)
+docs/          design notes: CONTRACTS.md, README_identity.md, P4_CONTRACT_CONFIRMATION.md, project guide PDF
+evaluation/    evaluation_report.md, usage_report.md, main.py (sample scorer)
+results/       generated reference outputs (sample_predictions.csv)
+scripts/       shortcuts: run_pipeline.sh, run_tests.sh, export_web.sh, build_code_zip.sh
+tests/         the whole test suite (pytest, configured by pytest.ini at the root)
+web/           Next.js website and API (deployed on Vercel; reads web/data/)
+output.csv     the submitted answers (518 rows)     log.txt   agent chat transcript
+```
 
 ## Setup
 
@@ -54,7 +68,8 @@ deterministic.
 ```bash
 python code/main.py                  # 518 requests -> output.csv (+ audit.db), ~9 s
 python code/validate_output.py       # contract check of output.csv; must print VALID
-python code/evaluation/main.py       # 32 public samples: run, validate, score against sample_output.csv
+sh scripts/run_pipeline.sh           # the three commands above in one go
+python evaluation/main.py            # 32 public samples: run, validate, score -> results/sample_predictions.csv
 ```
 
 `python code/main.py --requests sample_deletion_requests.csv --output <file>` runs any request
@@ -63,8 +78,7 @@ file in `dataset/`; only the default 518-case run writes `audit.db`.
 Tests:
 
 ```bash
-cd code && python -m pytest -q tests && cd ..             # policy engine, scanner, contract invariants
-python -m unittest discover -s code -p "test_*.py"        # classifier, identity, main, website data
+python -m pytest -q                  # whole suite from the repo root (608 passed, 1 skipped)
 ```
 
 ## Website (local)
@@ -104,14 +118,14 @@ Vercel cannot run the Python pipeline, so the site serves the JSON that is commi
    (`code/evidence/models.py`). Set `claim_only=True` for second-hand reports (a system saying
    what it found) and `False` for direct store state.
 2. Register its file extension in `_parser_for()` in `code/evidence/parsers/__init__.py`.
-3. Add a test in `code/tests/` with a small real-format file. Nothing else changes: the scanner,
+3. Add a test in `tests/` with a small real-format file. Nothing else changes: the scanner,
    policy engine and website pick the new records up.
 
 **Add a policy rule:**
 1. Add a row to `dataset/deletion_rules.csv` (`rule_id, data_category, condition, required_action`).
 2. If the condition uses new wording, add a predicate to `_CONDITION_KINDS` in `code/rules.py`.
    An unrecognised condition raises at start-up instead of being silently ignored.
-3. Add a compliant and a non-compliant record for it in `code/tests/test_policy_engine.py`
+3. Add a compliant and a non-compliant record for it in `tests/test_policy_engine.py`
    (`test_each_rule_*`).
 
 ## Policy engine notes
@@ -132,8 +146,8 @@ Vercel cannot run the Python pipeline, so the site serves the JSON that is commi
 
 ## Evaluation and submission
 
-* Results, custom test cases and the failures fixed: [`code/evaluation/evaluation_report.md`](code/evaluation/evaluation_report.md).
-  Token and cost usage of the final run (no model calls): [`code/evaluation/usage_report.md`](code/evaluation/usage_report.md).
+* Results, custom test cases and the failures fixed: [`evaluation/evaluation_report.md`](evaluation/evaluation_report.md).
+  Token and cost usage of the final run (no model calls): [`evaluation/usage_report.md`](evaluation/usage_report.md).
 * Challenge contract: [`problem_statement.md`](problem_statement.md); agent rules and logging: [`AGENTS.md`](AGENTS.md).
 * Submit `code.zip` (code, README, evaluation reports; no `dataset/`, `node_modules`, `.next`,
   `audit.db`, caches or nested archives), the root `output.csv`, and `log.txt` as the chat transcript:

@@ -2,7 +2,7 @@
 test_export_web_data.py — tests for export_web_data.py (masking + JSON files).
 
 Run from the repo root with:
-    python3 code/test_export_web_data.py
+    python3 tests/test_export_web_data.py
 """
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "code"))
 
 import audit_db
 import export_web_data as ex

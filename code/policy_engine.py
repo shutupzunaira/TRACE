@@ -4,7 +4,7 @@ policy_engine.py — Stage 3: deletion-policy and evidence validation
 
     decide(identity, evidence, case) -> dict
 
-Inputs (code/CONTRACTS.md, section 1)
+Inputs (docs/CONTRACTS.md, section 1)
 ------
 identity  P1's IdentityBundle (current + historical identifiers at audit_at).
           None (unresolved subject) gives INCOMPLETE with nothing verified.

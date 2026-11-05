@@ -2,9 +2,9 @@
 test_request_classifier.py — tests for classify_request().
 
 Run from the repo root with:
-    python3 code/test_request_classifier.py
+    python3 tests/test_request_classifier.py
 or:
-    python3 -m pytest code/test_request_classifier.py -v
+    python3 -m pytest tests/test_request_classifier.py -v
 """
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ import sys
 import unittest
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "code"))
 
 from models import ClassificationResult
 from request_classifier import LANGUAGES, classify_request, detect_language

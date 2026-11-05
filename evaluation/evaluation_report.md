@@ -3,10 +3,9 @@
 Reproduce every number in this report with:
 
 ```bash
-python code/evaluation/main.py                 # pipeline on the 32 public samples + scoring
-cd code && python -m pytest -q tests test_identity_resolver.py test_main.py test_request_classifier.py test_utils.py # 508 passed, 1 skipped, 592 subtests passed
+python evaluation/main.py                      # pipeline on the 32 public samples + scoring
+python -m pytest -q                            # whole suite from the repo root: 608 passed, 1 skipped, 1,200 subtests
 python code/main.py && python code/validate_output.py   # full 518-case run + contract check
-python -m unittest discover -s code -p "test_*.py"     # P1 suites (classifier, identity, main, website data)
 ```
 
 Re-verified on 2026-11-05: the sample metrics below are unchanged, `validate_output.py` reports
@@ -67,7 +66,7 @@ All 16 non-exact cases have the correct status; each differs only in one or two 
 ## 3. Additional evaluation cases created by the participant
 
 Each case is an isolated, synthetic world (real-format evidence files parsed by the production P2
-scanner, plus test identity / audit / activity tables) in `code/tests/test_policy_engine.py`.
+scanner, plus test identity / audit / activity tables) in `tests/test_policy_engine.py`.
 All pass.
 
 | # | Case (test name) | Input | Expected | Result |
@@ -83,7 +82,7 @@ All pass.
 | C9 | Tombstone (`test_tombstone_with_empty_pii_is_still_present_not_deleted`) | Tombstone with all direct identifiers null | Kept and `VERIFY_RECORD_REDACTED` with evidence; never treated as deleted | PASS |
 | C10 | All 15 rules (`test_each_rule_noncompliant_record`, `test_each_rule_compliant_record`) | One non-compliant and (where meaningful) one compliant record per CSV rule | Correct finding / remediation / verification per rule, rule id recorded | PASS |
 
-Full test inventory: 508 tests passed, 1 skipped, and 592 subtests passed (includes the 32 P3-P4 contract invariant checks).
+Full test inventory (`python -m pytest` from the repo root, after the files moved to `tests/`): 608 passed, 1 skipped, and 1,200 subtests passed. This includes the 32 P3-P4 contract invariant checks and the website-data suites.
 
 ## 4. Full evaluation set (518 requests, final run)
 
@@ -146,7 +145,7 @@ Found during the final check (2026-11-05):
   evidence is skipped and `case_33` flips from INCOMPLETE (export_1842, cited from the PDF
   `evidence_18`) to COMPLETE with no steps. The README now lists `pypdf` as required, and the
   final run was made with `pypdf==6.21.4` installed.
-* **Sample runs polluted the website data.** `code/evaluation/main.py` also wrote the 32 sample
+* **Sample runs polluted the website data.** `evaluation/main.py` also wrote the 32 sample
   cases into `audit.db`. `main.py` now writes `audit.db` only for the real 518-case run.
 
 Changes made to teammates' code: none to P1/P2 logic. In P1's `test_main.py`, two assertions that

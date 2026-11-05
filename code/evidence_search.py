@@ -3,7 +3,7 @@ evidence_search.py — Stage 2 adapter to P2's evidence scanner (code/evidence/)
 
 P2 owns discovery, parsing, normalisation and provenance
 (``evidence.integration.find_case_evidence``); this module only connects P1's
-pipeline to it and returns the P2 -> P3 dict (code/CONTRACTS.md, section 1):
+pipeline to it and returns the P2 -> P3 dict (docs/CONTRACTS.md, section 1):
 
     SubjectIdentifiers(**identity.as_subject_kwargs())   (inside P2's layer)
         -> {records, latest_by_resource, referenced_resources,

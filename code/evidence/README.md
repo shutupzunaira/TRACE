@@ -121,7 +121,7 @@ datetimes and offset-less strings raise `ValueError`; other types, or a `case` t
 raise `TypeError`.
 
 * Identifiers come from P1's adapter exactly: `SubjectIdentifiers(**identity.as_subject_kwargs())`.
-  Nothing from P1 is imported; only the attributes documented in `code/README_identity.md` are read
+  Nothing from P1 is imported; only the attributes documented in `docs/README_identity.md` are read
   (`as_subject_kwargs()`, `user_id`, `current_email`, `current_phone`, `current_email_hash`,
   `current_name`, `history[*].audit_id/field_name/old_value/new_value/event_time`).
 * `get_scanner(dataset_dir=None, *, ocr_mode="auto")` loads the corpus once per process for each

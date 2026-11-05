@@ -26,7 +26,7 @@ from rules import RuleBook, RecordFacts
 from step_builder import build_steps
 from test_independent_validation import BLOB_TABLE, SQL_HEADER, MiniDataset, blob_insert, snap
 
-REAL_DATASET = Path(__file__).resolve().parents[2] / "dataset"
+REAL_DATASET = Path(__file__).resolve().parents[1] / "dataset"
 UTC = timezone.utc
 EMAIL = "ana.subject@example.org"
 OLD_EMAIL = "ana.old@example.org"
@@ -641,7 +641,7 @@ _ALLOWED_FOR = {
 
 @pytest.mark.parametrize("case_id", [f"case_{i:02d}" for i in range(1, 33)])
 def test_p3_p4_contract_invariants_on_public_samples(real_ctx, case_id):
-    """P3 confirmation of the P3 -> P4 hand-over (code/P4_CONTRACT_CONFIRMATION.md):
+    """P3 confirmation of the P3 -> P4 hand-over (docs/P4_CONTRACT_CONFIRMATION.md):
     decide() returns only COMPLETE / INCOMPLETE, INCOMPLETE <=> at least one
     finding, every finding has a remediation, retained records / backups /
     tombstones are never deleted, and steps follow the canonical order

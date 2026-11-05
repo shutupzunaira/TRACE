@@ -2678,3 +2678,27 @@ branch=main
 repo_root=/Users/admin/Documents/TRACE/TRACE
 worktree=main
 parent_agent=none
+
+## [2026-11-05T08:28:18Z] Restructure repo to code/dataset/docs/evaluation/results/scripts/tests layout
+
+User Prompt (verbatim, secrets redacted):
+[Screenshot of another repo's top-level layout: code, dataset, docs, evaluation, results, scripts, tests, .gitignore, AGENTS.md, CLAUDE.md, README.md, agent_trace_instructions.md, log.txt, output.csv, problem_statement.md] organise the files in github according to this structure, if they ALREADY ARE, GIVE A CONFIRMATION
+[AskUserQuestion answer: "DO NOT BREAK WHILE DOING FULL RESTRUCTURE, IF YES CONTINUE WITH THAT IF NOT GO TO LIGHT FOLDERS ONLY"]
+
+Agent Response Summary:
+The layout did not match (docs/, evaluation/, results/, scripts/ and tests/ were missing), so asked first; the user chose the full restructure if nothing breaks. Recorded a baseline (391+217 tests passed, 1 skipped; output.csv SHA-256 a215494b...97b6ef). Committed the pending certificate page separately, then used git mv: code/evaluation -> evaluation/ (sample_predictions.csv -> results/), code/tests + code/test_*.py -> tests/, code/pytest.ini -> root pytest.ini (pythonpath code tests), CONTRACTS/P4_CONTRACT_CONFIRMATION/README_identity -> docs/. Fixed sys.path and parents[] in the tests and evaluation/main.py; updated README (with a new Repository layout section), evaluation_report, README_identity and code comments. Added scripts/ (run_pipeline, run_tests, export_web, build_code_zip) and results/README.md, and put the regenerated project PDF in docs/. Verified: 608 passed, 1 skipped (same as baseline); output.csv byte-identical and VALID; sample scores unchanged; web/data export unchanged; npm run build OK; code.zip rebuilt (653 files, no excluded paths). web/ is kept because Vercel needs it. Committed and pushed to main.
+
+Actions:
+* git commit (certificate page); git mv (evaluation, tests, docs, results, pytest.ini)
+* Edited tests/*.py, evaluation/main.py, pytest.ini, README.md, evaluation/evaluation_report.md, docs/README_identity.md and code comments
+* Created scripts/*.sh, results/README.md and docs/TRACE_Complete_Project.pdf
+* pytest (before/after); code/main.py; validate_output.py; evaluation/main.py; export_web_data.py; npm run build; scripts/build_code_zip.sh
+* git add -A; git commit; git push
+
+Context:
+tool=Claude Code
+model=claude-opus-5-5
+branch=main
+repo_root=/Users/admin/Documents/TRACE/TRACE
+worktree=main
+parent_agent=none

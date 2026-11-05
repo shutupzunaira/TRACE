@@ -12,7 +12,7 @@ keys (see ``code/evidence/README.md``):
     identifier_provenance
 
 Nothing from P1 is imported. The identity object is used only through the
-attributes P1 documents in ``code/README_identity.md``:
+attributes P1 documents in ``docs/README_identity.md``:
 
     as_subject_kwargs(), user_id, current_email, current_phone,
     current_email_hash, current_name,

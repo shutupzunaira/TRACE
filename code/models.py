@@ -8,7 +8,7 @@ from typing import Optional
 
 # ---------------------------------------------------------------------------
 # P2 -> P3 contract: keys of the dict returned by evidence_search.find_records()
-# (see code/CONTRACTS.md, section 1)
+# (see docs/CONTRACTS.md, section 1)
 # ---------------------------------------------------------------------------
 EVIDENCE_KEYS: tuple[str, ...] = (
     "records",                # list[ObservedRecord]

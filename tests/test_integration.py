@@ -2,7 +2,7 @@
 
 P1's IdentityBundle / IdentityChange are represented by test-only fakes that
 implement exactly the fields and the as_subject_kwargs() mapping documented in
-P1's code/README_identity.md (no P1 import, no second resolver).
+P1's docs/README_identity.md (no P1 import, no second resolver).
 """
 
 from __future__ import annotations

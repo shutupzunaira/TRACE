@@ -2,7 +2,7 @@
 test_case_timeline.py — tests for the derived time-travel timeline.
 
 Run from the repo root with:
-    python3 code/test_case_timeline.py
+    python3 tests/test_case_timeline.py
 """
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from types import SimpleNamespace as NS
 
-sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "code"))
 
 from case_timeline import build_timeline
 from models import IdentityChange

@@ -2,7 +2,7 @@
 test_main.py — tests that one bad case never stops the run.
 
 Run from the repo root with:
-    python3 code/test_main.py
+    python3 tests/test_main.py
 """
 from __future__ import annotations
 
@@ -14,7 +14,7 @@ from contextlib import redirect_stderr
 from pathlib import Path
 from unittest import mock
 
-sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "code"))
 
 import main
 from identity_resolver import IdentityResolver
